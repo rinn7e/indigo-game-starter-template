@@ -1,6 +1,6 @@
 # indigo-game-starter-template
 
-[![AI-DECLARATION: copilot](https://img.shields.io/badge/䷼%20AI--DECLARATION-copilot-fee2e2?labelColor=fee2e2)](AI-DECLARATION.md)
+[![AI-DECLARATION: pair](https://img.shields.io/badge/䷼%20AI--DECLARATION-pair-ffedd5?labelColor=ffedd5)](AI-DECLARATION.md)
 
 A starter template for browser games built with [Indigo](https://indigoengine.io) `0.30.0-M6`, a
 purely functional game engine for Scala 3 / Scala.js, structured the way
@@ -187,7 +187,7 @@ See [CHANGELOG.md](CHANGELOG.md) for what changed in each version, and
 ## AI declaration
 
 This project declares its AI usage in [AI-DECLARATION.md](AI-DECLARATION.md), following the
-[AI-DECLARATION.md](https://ai-declaration.md) standard (level: `copilot`).
+[AI-DECLARATION.md](https://ai-declaration.md) standard (level: `pair`).
 
 ## License
 
