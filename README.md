@@ -1,6 +1,9 @@
 # indigo-game-starter-template
 
 [![AI-DECLARATION: pair](https://img.shields.io/badge/䷼%20AI--DECLARATION-pair-ffedd5?labelColor=ffedd5)](AI-DECLARATION.md)
+[![Play on GitHub Pages](https://github.com/rinn7e/indigo-game-starter-template/actions/workflows/pages.yml/badge.svg)](https://github.com/rinn7e/indigo-game-starter-template/actions/workflows/pages.yml)
+
+**▶ [Play Slime Quest in your browser](https://rinn7e.com/indigo-game-starter-template/)**
 
 A starter template for browser games built with [Indigo](https://indigoengine.io) `0.30.0-M6`, a
 purely functional game engine for Scala 3 / Scala.js, structured the way
@@ -48,6 +51,7 @@ The game is the `game` module: sources in `game/src/game/` (the `game` package),
 ./mill game.test          # run the unit tests (pure game logic)
 ./mill game.indigoBuild   # build a static site into out/game/indigoBuild.dest
 ./mill game.indigoRun     # run in Electron
+./mill game.indigoBuildFull  # the optimised build, as published to GitHub Pages
 ./mill __.reformat        # scalafmt
 ./mill clean game         # see below
 ```

@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and adher
 
 ### Added
 
+- **Play it online**: every push to `master` runs the tests, builds the optimised game and
+  publishes it to GitHub Pages (`.github/workflows/pages.yml`).
+
 ---
 
 ## [0.1.0] - 2026-09-29
