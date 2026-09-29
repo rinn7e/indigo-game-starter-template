@@ -10,8 +10,8 @@ where you talk to the village elder, fight slimes in turn-based battles, loot ch
 and defeat the Slime King in the ruins east of the river. Each scene fades in and plays a short
 sound on entry.
 
-To start your own game, clone the repository, rename the `rpg` module and package if you like, and
-replace the scenes in `rpg/src/rpg/scene/`, keeping the structure described below.
+To start your own game, clone the repository, keep the generic `game` package (or rename it), and
+replace the scenes in `src/game/scene/`, keeping the structure described below.
 
 ## Screenshots
 
@@ -31,30 +31,32 @@ replace the scenes in `rpg/src/rpg/scene/`, keeping the structure described belo
 
 - A JDK (tested with OpenJDK 21), for Mill and the Scala compiler.
 - Node.js (tested with 24), which runs the Scala.js unit tests.
-- Python 3, only to serve the build locally and to regenerate assets (`rpg/tools/`).
+- Python 3, only to serve the build locally and to regenerate assets (`tools/`).
 
 Mill itself needs no install: the bundled `./mill` launcher downloads the pinned version.
 
 ## Commands
 
 This is a Mill 1.x build (the version is pinned in `.mill-version`, use the bundled `./mill` launcher).
+The game is the build's root module, so commands take no module prefix, and the sources live in
+`src/game/` (the `game` package), tests in `test/src/game/`, and assets in `assets/`.
 
 ```bash
-./mill rpg.test          # run the unit tests (pure game logic)
-./mill rpg.indigoBuild   # build a static site into out/rpg/indigoBuild.dest
-./mill rpg.indigoRun     # run in Electron
-./mill __.reformat       # scalafmt
-./mill clean rpg         # see below
+./mill test          # run the unit tests (pure game logic)
+./mill indigoBuild   # build a static site into out/indigoBuild.dest
+./mill indigoRun     # run in Electron
+./mill __.reformat   # scalafmt
+./mill clean         # see below
 ```
 
 If the compiler reports an *old* signature for something re-exported by a barrel (`WorldScene.init`
 still taking the old parameters, say), the incremental build has kept a stale barrel: run
-`./mill clean rpg` and build again.
+`./mill clean` and build again.
 
 To play in a browser, serve the build output:
 
 ```bash
-python3 -m http.server 8765 --directory out/rpg/indigoBuild.dest
+python3 -m http.server 8421 --directory out/indigoBuild.dest
 ```
 
 ## Coming from Scala / Indigo? What's unusual here
@@ -71,7 +73,7 @@ Indigo code, on purpose:
 | `updateModel` pattern-matching raw `GlobalEvent`s | `subscriptions` first turns engine events (`FrameTick`, keys) into the module's own `Msg`; `update` only ever sees `Msg` | Same split as Elm's `subscriptions` / `update`. |
 | `context` passed around | `Shared(now, dice, viewport)`, built once per frame | The only per-frame inputs `update` / `ui` need; keeps them pure and testable (`Dice.loaded(n)`). |
 | Top-level `def`s spread over a package | **One file, one module**: every `X.scala` is `object X` (or a type `X` with its companion), even `Update.scala`; siblings imported explicitly | Mirrors Haskell's `module A.B.X` per file. |
-| `package.scala` / package objects as barrels | Haskell-style barrels **next to** the folder: `scene/WorldScene.scala` re-exports `scene/worldscene/`, used as `import rpg.scene.WorldScene` → `WorldScene.update` | Like `WorldScene.hs` next to `WorldScene/`, or an `index.ts`. |
+| `package.scala` / package objects as barrels | Haskell-style barrels **next to** the folder: `scene/WorldScene.scala` re-exports `scene/worldscene/`, used as `import game.scene.WorldScene` → `WorldScene.update` | Like `WorldScene.hs` next to `WorldScene/`, or an `index.ts`. |
 | Extension methods (`model.enemyAt(pt)`) | **Plain curried functions, data last**: `enemyAt(pt)(model)`, `damage(amount)(stats)`; chains use the stdlib's `pipe`: `model.copy(...).pipe(withToast(msg, now))` | Reads like Elm / Haskell (`enemyAt pt model`, `\|>`). |
 | `view` / `render` / `draw` names | `ui`; every function returning a drawing type ends in `UI` (`hudUI`, `boxUI`) | Tells you at a glance what draws. |
 | `Model`, `Logic`, `View` files | `Type` / `Update` / `Subscription` / `UI` per module | The file names of a TEA web app's modules (`type.ts`, `update.ts`, ...). |
@@ -83,9 +85,9 @@ The full rules are in **[doc/code-convention.md](doc/code-convention.md)**. Ever
 
 | Scala here | Elm / Haskell |
 | --- | --- |
-| `X.scala` containing `object X` | a module file, `module Rpg.Scene.WorldScene.Update` |
-| `import rpg.scene.worldscene.Type.*` | `import Rpg.Scene.WorldScene.Type` (unqualified) |
-| `import rpg.scene.WorldScene`, then `WorldScene.update(...)` | `import qualified Rpg.Scene.WorldScene as WorldScene` |
+| `X.scala` containing `object X` | a module file, `module Game.Scene.WorldScene.Update` |
+| `import game.scene.worldscene.Type.*` | `import Game.Scene.WorldScene.Type` (unqualified) |
+| `import game.scene.WorldScene`, then `WorldScene.update(...)` | `import qualified Game.Scene.WorldScene as WorldScene` |
 | `enum Msg: case Walk(direction: Direction)` | `type Msg = Walk Direction \| ...` |
 | `final case class Model(...)` | a record type alias / data record |
 | `model.copy(player = p)` | `{ model \| player = p }` |
@@ -105,7 +107,7 @@ The full rules are in **[doc/code-convention.md](doc/code-convention.md)**. Ever
 
 Nothing in this codebase uses mutable state, `var`, type classes (`given`) or implicit conversions.
 
-**Where to start:** `rpg/src/rpg/Main.scala` (the program), then the root `Type.scala` /
+**Where to start:** `src/game/Main.scala` (the program), then the root `Type.scala` /
 `Update.scala`, then one scene: `scene/WorldScene.scala` and the files in `scene/worldscene/`.
 
 ## Architecture
@@ -118,13 +120,13 @@ there are no messages from child to parent.
 return drawing types end in `UI`).
 
 ```
-rpg/src/rpg/
+src/game/
   Main.scala           entry point, the Indigo Game, mainUI           ~ root.tsx + program.tsx + app.tsx
   Type.scala           root Model (route + scene models), Msg         ~ type.ts
   Update.scala         root init, update: delegate, intercept, route  ~ update.ts
   Subscription.scala   the showing scene's subscriptions, wrapped     ~ subscription.ts
   common/
-    Types.scala        barrel: re-exports types/ (import rpg.common.Types.*)
+    Types.scala        barrel: re-exports types/ (import game.common.Types.*)
     types/             Character, Entity, Direction, Ending, Level, Placement, SceneRoute, Shared,
                        Tile, TileMap
     util/              pure helpers: Character, TileMap, LevelParser, Dialogue, Input
@@ -142,10 +144,10 @@ rpg/src/rpg/
       Subscription.scala engine events (keys, FrameTick) -> Msg
       UI.scala           ui(shared, model): SceneUpdateFragment       ~ component.tsx
       subui/             scene-only UI: stateless XxxUI.scala (e.g. HudUI, TerrainUI) or
-                         a stateful TEA module folder (e.g. battle/subui/actionmenu/)
+                         a stateful TEA module folder (e.g. battlescene/subui/actionmenu/)
       common/            scene-local helpers (world: queries, camera)
-rpg/test/src/rpg/      mirrors the source tree
-rpg/tools/
+test/src/game/         mirrors the source tree
+tools/
   gen_tileset.py       regenerates assets/tiles.png (pure Python, no dependencies)
   gen_sfx.py           regenerates the scene-entry sounds, assets/sfx_*.wav (same)
 ```

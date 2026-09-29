@@ -14,7 +14,7 @@ import mill.scalalib.scalafmt.*
 import indigoplugin.*
 import org.typelevel.scalacoptions.*
 
-object rpg extends MillIndigoJS with ScalafmtModule {
+object `package` extends MillIndigoJS with ScalafmtModule {
   def scalaVersion   = "3.8.4"
   def scalaJSVersion = "1.22.0"
 
@@ -39,7 +39,7 @@ object rpg extends MillIndigoJS with ScalafmtModule {
   }
 
   def indigoAssets =
-    Task.Source(BuildCtx.workspaceRoot / "rpg" / "assets")
+    Task.Source(BuildCtx.workspaceRoot / "assets")
 
   def indigoOptions(assetsDirectory: os.Path): IndigoOptions =
     IndigoOptions.defaults
@@ -53,8 +53,8 @@ object rpg extends MillIndigoJS with ScalafmtModule {
       }
 
   def indigoGenerators(assetsDirectory: os.Path): IndigoGenerators =
-    IndigoGenerators("rpg.generated")
-      .generateConfig("RpgConfig")
+    IndigoGenerators("game.generated")
+      .generateConfig("BuildConfig")
       .listAssets("Assets")
 
   def mvnDeps =

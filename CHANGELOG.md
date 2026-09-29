@@ -22,6 +22,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/) and adher
 - **Stateless and stateful UI**: `XxxUI` modules for stateless UI, and a TEA module folder for stateful UI (`scene/battlescene/subui/actionmenu/`).
 - **Example game, Slime Quest**: a top-down RPG with an overworld, NPC dialogue, a quest, chests, wandering slimes, turn-based battles, levelling, and victory / game-over endings.
 - **Performance**: the map is drawn with instanced `CloneTiles` from a generated tileset, with a static cached batch and an animated water batch; FPS counter in the top-left corner.
-- **Asset generators**: `rpg/tools/gen_tileset.py` (tileset) and `rpg/tools/gen_sfx.py` (scene-entry sounds), pure Python with no dependencies.
+- **Asset generators**: `tools/gen_tileset.py` (tileset) and `tools/gen_sfx.py` (scene-entry sounds), pure Python with no dependencies.
 - **Unit tests** for root routing, scene updates and subscriptions, the action menu, character helpers, the level parser and map reachability.
 - **Documentation**: `README.md` guides for Scala / Indigo and Elm / Haskell developers, `doc/code-convention.md` (rules 0-6) and `doc/tea-isomorphism.md` (TEA web app ↔ Indigo game mapping, with ASCII diagrams).

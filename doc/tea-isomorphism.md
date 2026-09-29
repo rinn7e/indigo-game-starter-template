@@ -56,7 +56,7 @@ The shapes are identical. The two differences: the game has a clock that fires e
 
 ## 1. Folder map
 
-| TEA frontend (`src/`)                          | Game (`rpg/src/rpg/`)                               | Notes |
+| TEA frontend (`src/`)                          | Game (`src/game/`)                                  | Notes |
 | ---------------------------------------------- | --------------------------------------------------- | ----- |
 | `root.tsx` — mounts the program                | `Main.scala` — `object Main`, `@JSExportTopLevel("IndigoGame")` | Entry point the HTML page calls. |
 | `program.tsx` — `ProgramWithNav(init, update, view, subscriptions)` | `Main.scala` — `class Program`, the Indigo `Game`: `initialModel`, `updateModel`, `present` | Same four things, Indigo names. |
@@ -66,7 +66,7 @@ The shapes are identical. The two differences: the game has a clock that fires e
 | `subscription.ts`                              | `Subscription.scala`                                | The showing scene's subscriptions, wrapped. |
 | `common/type/route`                            | `common/types/SceneRoute.scala`                     | Navigating = setting `route` in the root model. |
 | `common/type/shared.ts` (`Shared`)             | `common/types/Shared.scala`                         | Passed to every scene's `update`/`ui`. |
-| `common/type/`                                 | `common/types/` + barrel `common/Types.scala`       | `type` is a Scala keyword, hence `types`. Consumers `import rpg.common.Types.*`. |
+| `common/type/`                                 | `common/types/` + barrel `common/Types.scala`       | `type` is a Scala keyword, hence `types`. Consumers `import game.common.Types.*`. |
 | `common/util/`                                 | `common/util/`                                      | Pure helpers: curried functions, data last (`tileAt(pt)(map)`). |
 | `common/constant/`                             | `common/constant/`                                  | Layout sizes, layer keys, the map. |
 | `component/` — reusable views                  | `ui/` — `PanelUI`, `BarUI`, `LabelUI`, `ScreenUI`, `CharacterSpriteUI` | Same `XxxUI` module shape as stateless sub-UIs (§7). |
@@ -77,7 +77,7 @@ The shapes are identical. The two differences: the game has a clock that fires e
 | `page/<name>/component.tsx`                    | `scene/<name>/UI.scala`                             | `ui` (TEA's `view`). |
 | `page/<name>/sub-component/`                   | `scene/<name>/subui/`                               | |
 | `page/<name>/common/util.ts`                   | `scene/<name>/common/Util.scala`                    | |
-| `page/<name>/index.ts` (barrel)                | `scene/WorldScene.scala` — `object WorldScene` re-exporting `worldscene/` | Haskell style: `Rpg/Scene/WorldScene.hs` next to `Rpg/Scene/WorldScene/`. The parent does `import rpg.scene.WorldScene`. |
+| `page/<name>/index.ts` (barrel)                | `scene/WorldScene.scala` — `object WorldScene` re-exporting `worldscene/` | Haskell style: `Game/Scene/WorldScene.hs` next to `Game/Scene/WorldScene/`. The parent does `import game.scene.WorldScene`. |
 
 Scenes: `title`, `world`, `battle`, `end`.
 
@@ -113,7 +113,7 @@ downwards: scenes never import the root or each other.
      CharacterSpriteUI
 
    ui/ also uses common/ and theme/.
-   The root files import each scene through its barrel module: rpg.scene.{WorldScene, ...}.
+   The root files import each scene through its barrel module: game.scene.{WorldScene, ...}.
 ```
 
 ---
@@ -427,12 +427,12 @@ makes the file its own module, and the consumer imports just the function:
 
 ```scala
 // scene/battlescene/subui/BattleLogUI.scala
-package rpg.scene.battlescene.subui
-object BattleLogUI:                               // ~ module Rpg.Scene.BattleScene.Subui.BattleLogUI
+package game.scene.battlescene.subui
+object BattleLogUI:                               // ~ module Game.Scene.BattleScene.Subui.BattleLogUI
   def battleLogUI(model: Model): Batch[SceneNode] = ...
 
 // scene/battlescene/UI.scala
-import rpg.scene.battlescene.subui.BattleLogUI.battleLogUI   // ~ import ...BattleLogUI (battleLogUI)
+import game.scene.battlescene.subui.BattleLogUI.battleLogUI   // ~ import ...BattleLogUI (battleLogUI)
 battleLogUI(model)
 ```
 
@@ -449,7 +449,7 @@ Naming rules for all of this (e.g. every function returning a drawing type ends 
 [code-convention.md](code-convention.md).
 
 Reusable UI used by several scenes lives in `ui/`, in the same `XxxUI` module shape: e.g.
-`import rpg.ui.PanelUI.panelUI`, `import rpg.ui.LabelUI.{labelUI, centeredLabelUI}`. A module
+`import game.ui.PanelUI.panelUI`, `import game.ui.LabelUI.{labelUI, centeredLabelUI}`. A module
 can hold a few related functions (`LabelUI`, `CharacterSpriteUI`) when they share helpers.
 
 How the world scene's UI is assembled, bottom layer first:
@@ -497,7 +497,7 @@ How the world scene's UI is assembled, bottom layer first:
 5. Root: add a `SceneRoute` case, a model field and an `XSceneMsg(subMsg)` case in `Type.scala`, and a
    branch in `Subscription.scala`, `Update.scala` (delegate + intercept) and `mainUI`'s `sceneUI`.
    The compiler points at every `match` you missed.
-6. Tests mirror the source tree: `rpg/test/src/rpg/scene/<name>/UpdateTests.scala`.
+6. Tests mirror the source tree: `test/src/game/scene/<name>/UpdateTests.scala`.
 
 ---
 

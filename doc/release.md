@@ -15,21 +15,21 @@ Make sure the codebase is formatted, builds cleanly and all tests pass:
 ./mill __.reformat
 
 # 2. Clean build and run all unit tests (the build uses -Werror)
-./mill clean rpg
-./mill rpg.test
+./mill clean
+./mill test
 
 # 3. Build the static site
-./mill rpg.indigoBuild
+./mill indigoBuild
 ```
 
 Then play it in a real browser (not a headless one, which renders without a GPU and misreports
 performance):
 
 ```bash
-python3 -m http.server 8765 --directory out/rpg/indigoBuild.dest
+python3 -m http.server 8421 --directory out/indigoBuild.dest
 ```
 
-Open <http://localhost:8765> and check that:
+Open <http://localhost:8421> and check that:
 
 - the FPS counter (top-left) stays at 60 on the title, world and battle scenes;
 - every scene fades in and plays its entry sound (the title's is silent until the first key

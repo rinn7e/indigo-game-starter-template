@@ -38,26 +38,26 @@ Which to return:
 
 Every file `X.scala` defines `object X` (or a type `X` with its companion `object X`), and nothing
 else at the top level. The object is the module, like Haskell's
-`module Rpg.Scene.EndScene.Update` for `Rpg/Scene/EndScene/Update.hs`; packages stay lowercase
+`module Game.Scene.EndScene.Update` for `Game/Scene/EndScene/Update.hs`; packages stay lowercase
 (Scala convention), and only serve as the namespace.
 
 ```scala
-// scene/endscene/Update.scala              ~ module Rpg.Scene.EndScene.Update
-package rpg.scene.endscene
+// scene/endscene/Update.scala              ~ module Game.Scene.EndScene.Update
+package game.scene.endscene
 
-import rpg.scene.endscene.Type.*            // ~ import Rpg.Scene.EndScene.Type
+import game.scene.endscene.Type.*            // ~ import Game.Scene.EndScene.Type
 
 object Update:
   def update(shared: Shared, msg: Msg, model: Model): Outcome[Model] = ...
 ```
 
-- **Import modules explicitly**, siblings included (`import rpg.scene.endscene.Type.*`,
-  `import rpg.common.util.Dialogue.*`). There are no wildcard imports of whole packages.
+- **Import modules explicitly**, siblings included (`import game.scene.endscene.Type.*`,
+  `import game.common.util.Dialogue.*`). There are no wildcard imports of whole packages.
 - **Barrels are Haskell style**: a folder `foo/` gets a sibling `Foo.scala` whose `object Foo`
-  re-exports it (~ `Rpg/Scene/WorldScene.hs` re-exporting `Rpg/Scene/WorldScene/*`, or an
+  re-exports it (~ `Game/Scene/WorldScene.hs` re-exporting `Game/Scene/WorldScene/*`, or an
   `index.ts`): `scene/WorldScene.scala` (and `TitleScene`, `BattleScene`, `EndScene`),
   `scene/battlescene/subui/ActionMenu.scala`, `common/Types.scala`. Parents use them qualified:
-  `import rpg.scene.WorldScene`, then `WorldScene.update`, `WorldScene.Msg`, `WorldScene.ui`.
+  `import game.scene.WorldScene`, then `WorldScene.update`, `WorldScene.Msg`, `WorldScene.ui`.
 - `common/util/` has no barrel on purpose: its modules are named after the types they extend
   (`Dialogue`, `TileMap`), so importing them all at once would clash with the types.
 
@@ -99,13 +99,13 @@ A stateless ("dumb") piece of UI lives in `XxxUI.scala` as `object XxxUI`, whose
 just the function:
 
 ```scala
-// scene/battlescene/subui/BattleLogUI.scala  ~ module Rpg.Scene.BattleScene.Subui.BattleLogUI
-package rpg.scene.battlescene.subui
+// scene/battlescene/subui/BattleLogUI.scala  ~ module Game.Scene.BattleScene.Subui.BattleLogUI
+package game.scene.battlescene.subui
 object BattleLogUI:
   def battleLogUI(model: Model): Batch[SceneNode] = ...
 
 // scene/battlescene/UI.scala                 ~ import ...BattleLogUI (battleLogUI)
-import rpg.scene.battlescene.subui.BattleLogUI.battleLogUI
+import game.scene.battlescene.subui.BattleLogUI.battleLogUI
 battleLogUI(model)
 ```
 
