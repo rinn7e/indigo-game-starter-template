@@ -1,9 +1,9 @@
-"""Generates assets/tiles.png, the terrain tileset used by the overworld CloneTiles.
+"""Generates game/assets/tiles.png, the terrain tileset used by the overworld CloneTiles.
 
 Pure Python (no PIL). Each tile is 16x16, laid out left to right in the order of
 `game.scene.worldscene.subui.TerrainUI` (keep the two in sync). Run from the project root:
 
-    python3 tools/gen_tileset.py
+    python3 game/tools/gen_tileset.py
 """
 
 import struct

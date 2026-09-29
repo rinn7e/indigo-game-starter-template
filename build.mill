@@ -14,7 +14,7 @@ import mill.scalalib.scalafmt.*
 import indigoplugin.*
 import org.typelevel.scalacoptions.*
 
-object `package` extends MillIndigoJS with ScalafmtModule {
+object game extends MillIndigoJS with ScalafmtModule {
   def scalaVersion   = "3.8.4"
   def scalaJSVersion = "1.22.0"
 
@@ -39,7 +39,7 @@ object `package` extends MillIndigoJS with ScalafmtModule {
   }
 
   def indigoAssets =
-    Task.Source(BuildCtx.workspaceRoot / "assets")
+    Task.Source(BuildCtx.workspaceRoot / "game" / "assets")
 
   def indigoOptions(assetsDirectory: os.Path): IndigoOptions =
     IndigoOptions.defaults

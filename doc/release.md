@@ -15,18 +15,18 @@ Make sure the codebase is formatted, builds cleanly and all tests pass:
 ./mill __.reformat
 
 # 2. Clean build and run all unit tests (the build uses -Werror)
-./mill clean
-./mill test
+./mill clean game
+./mill game.test
 
 # 3. Build the static site
-./mill indigoBuild
+./mill game.indigoBuild
 ```
 
 Then play it in a real browser (not a headless one, which renders without a GPU and misreports
 performance):
 
 ```bash
-python3 -m http.server 8421 --directory out/indigoBuild.dest
+python3 -m http.server 8421 --directory out/game/indigoBuild.dest
 ```
 
 Open <http://localhost:8421> and check that:

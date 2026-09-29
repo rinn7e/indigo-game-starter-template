@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Generates the scene-entry sound effects in assets/ as small 8-bit style WAV files.
+"""Generates the scene-entry sound effects in game/assets/ as small 8-bit style WAV files.
 
 Pure Python (standard library only), like gen_tileset.py. Run from the repository root:
 
-    python3 tools/gen_sfx.py
+    python3 game/tools/gen_sfx.py
 """
 
 import math

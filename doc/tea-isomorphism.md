@@ -56,7 +56,7 @@ The shapes are identical. The two differences: the game has a clock that fires e
 
 ## 1. Folder map
 
-| TEA frontend (`src/`)                          | Game (`src/game/`)                                  | Notes |
+| TEA frontend (`src/`)                          | Game (`game/src/game/`)                             | Notes |
 | ---------------------------------------------- | --------------------------------------------------- | ----- |
 | `root.tsx` — mounts the program                | `Main.scala` — `object Main`, `@JSExportTopLevel("IndigoGame")` | Entry point the HTML page calls. |
 | `program.tsx` — `ProgramWithNav(init, update, view, subscriptions)` | `Main.scala` — `class Program`, the Indigo `Game`: `initialModel`, `updateModel`, `present` | Same four things, Indigo names. |
@@ -497,7 +497,7 @@ How the world scene's UI is assembled, bottom layer first:
 5. Root: add a `SceneRoute` case, a model field and an `XSceneMsg(subMsg)` case in `Type.scala`, and a
    branch in `Subscription.scala`, `Update.scala` (delegate + intercept) and `mainUI`'s `sceneUI`.
    The compiler points at every `match` you missed.
-6. Tests mirror the source tree: `test/src/game/scene/<name>/UpdateTests.scala`.
+6. Tests mirror the source tree: `game/test/src/game/scene/<name>/UpdateTests.scala`.
 
 ---
 

@@ -10,8 +10,9 @@ where you talk to the village elder, fight slimes in turn-based battles, loot ch
 and defeat the Slime King in the ruins east of the river. Each scene fades in and plays a short
 sound on entry.
 
-To start your own game, clone the repository, keep the generic `game` package (or rename it), and
-replace the scenes in `src/game/scene/`, keeping the structure described below.
+To start your own game, clone the repository, keep the generic `game` module and package (or
+rename them), and replace the scenes in `game/src/game/scene/`, keeping the structure described
+below.
 
 ## Screenshots
 
@@ -31,32 +32,32 @@ replace the scenes in `src/game/scene/`, keeping the structure described below.
 
 - A JDK (tested with OpenJDK 21), for Mill and the Scala compiler.
 - Node.js (tested with 24), which runs the Scala.js unit tests.
-- Python 3, only to serve the build locally and to regenerate assets (`tools/`).
+- Python 3, only to serve the build locally and to regenerate assets (`game/tools/`).
 
 Mill itself needs no install: the bundled `./mill` launcher downloads the pinned version.
 
 ## Commands
 
 This is a Mill 1.x build (the version is pinned in `.mill-version`, use the bundled `./mill` launcher).
-The game is the build's root module, so commands take no module prefix, and the sources live in
-`src/game/` (the `game` package), tests in `test/src/game/`, and assets in `assets/`.
+The game is the `game` module: sources in `game/src/game/` (the `game` package), tests in
+`game/test/src/game/`, assets in `game/assets/`.
 
 ```bash
-./mill test          # run the unit tests (pure game logic)
-./mill indigoBuild   # build a static site into out/indigoBuild.dest
-./mill indigoRun     # run in Electron
-./mill __.reformat   # scalafmt
-./mill clean         # see below
+./mill game.test          # run the unit tests (pure game logic)
+./mill game.indigoBuild   # build a static site into out/game/indigoBuild.dest
+./mill game.indigoRun     # run in Electron
+./mill __.reformat        # scalafmt
+./mill clean game         # see below
 ```
 
 If the compiler reports an *old* signature for something re-exported by a barrel (`WorldScene.init`
 still taking the old parameters, say), the incremental build has kept a stale barrel: run
-`./mill clean` and build again.
+`./mill clean game` and build again.
 
 To play in a browser, serve the build output:
 
 ```bash
-python3 -m http.server 8421 --directory out/indigoBuild.dest
+python3 -m http.server 8421 --directory out/game/indigoBuild.dest
 ```
 
 ## Coming from Scala / Indigo? What's unusual here
@@ -107,7 +108,7 @@ The full rules are in **[doc/code-convention.md](doc/code-convention.md)**. Ever
 
 Nothing in this codebase uses mutable state, `var`, type classes (`given`) or implicit conversions.
 
-**Where to start:** `src/game/Main.scala` (the program), then the root `Type.scala` /
+**Where to start:** `game/src/game/Main.scala` (the program), then the root `Type.scala` /
 `Update.scala`, then one scene: `scene/WorldScene.scala` and the files in `scene/worldscene/`.
 
 ## Architecture
@@ -120,7 +121,7 @@ there are no messages from child to parent.
 return drawing types end in `UI`).
 
 ```
-src/game/
+game/src/game/
   Main.scala           entry point, the Indigo Game, mainUI           ~ root.tsx + program.tsx + app.tsx
   Type.scala           root Model (route + scene models), Msg         ~ type.ts
   Update.scala         root init, update: delegate, intercept, route  ~ update.ts
@@ -146,8 +147,8 @@ src/game/
       subui/             scene-only UI: stateless XxxUI.scala (e.g. HudUI, TerrainUI) or
                          a stateful TEA module folder (e.g. battlescene/subui/actionmenu/)
       common/            scene-local helpers (world: queries, camera)
-test/src/game/         mirrors the source tree
-tools/
+game/test/src/game/    mirrors the source tree
+game/tools/
   gen_tileset.py       regenerates assets/tiles.png (pure Python, no dependencies)
   gen_sfx.py           regenerates the scene-entry sounds, assets/sfx_*.wav (same)
 ```
