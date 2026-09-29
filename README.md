@@ -1,5 +1,7 @@
 # indigo-game-starter-template
 
+[![AI-DECLARATION: copilot](https://img.shields.io/badge/䷼%20AI--DECLARATION-copilot-fee2e2?labelColor=fee2e2)](AI-DECLARATION.md)
+
 A starter template for browser games built with [Indigo](https://indigoengine.io) `0.30.0-M6`, a
 purely functional game engine for Scala 3 / Scala.js, structured the way
 [The Elm Architecture](https://guide.elm-lang.org/architecture/) (TEA) web apps are: every scene
@@ -181,6 +183,11 @@ centred when the window is larger than it, and the title / battle / end screens 
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each version, and
 [doc/release.md](doc/release.md) for how a release is made.
+
+## AI declaration
+
+This project declares its AI usage in [AI-DECLARATION.md](AI-DECLARATION.md), following the
+[AI-DECLARATION.md](https://ai-declaration.md) standard (level: `copilot`).
 
 ## License
 
